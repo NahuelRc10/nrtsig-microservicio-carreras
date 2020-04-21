@@ -1,9 +1,9 @@
 package nrtsig.microservicio.carrera.app.models.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import nrt.microservicios.main.commons.carrera.entity.Departamento;
 
-public interface DepartamentoRepository extends CrudRepository<Departamento, Long> {
+public interface DepartamentoRepository extends PagingAndSortingRepository<Departamento, Long> {
 
 }
