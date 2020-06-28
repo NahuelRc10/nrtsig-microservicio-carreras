@@ -18,5 +18,5 @@ public class PlanCarreraServiceImpl extends CommonServiceImpl<PlanCarrera, PlanC
 	public PlanCarrera getPlanCarreraActualByCarrera(Long idCarrera) {
 		return planCarreraRepository.findPlanCarreraActualByCarrera(idCarrera);
 	}
-
+	
 }
