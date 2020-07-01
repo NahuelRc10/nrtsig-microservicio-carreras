@@ -10,4 +10,5 @@ import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
 public interface CarreraService extends CommonService<Carrera> {
 
 	public List<Carrera> search(CarreraFiltrosDTO filtrosDTO);
+	public void activarCarrera(Long id) throws Exception;
 }

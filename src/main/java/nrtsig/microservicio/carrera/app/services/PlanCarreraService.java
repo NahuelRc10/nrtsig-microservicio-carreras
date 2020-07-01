@@ -6,4 +6,5 @@ import nrt.microservicios.main.commons.carrera.entity.PlanCarrera;
 public interface PlanCarreraService extends CommonService<PlanCarrera> {
 
 	public PlanCarrera getPlanCarreraActualByCarrera(Long idCarrera);
+	public void cerrarPlanCarreraById(Long id) throws Exception;
 }

@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
@@ -14,11 +16,13 @@ import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
 @Component
 public class SearchRepositoryImpl implements SearchRepository {
 
+	private static final Logger logger = LoggerFactory.getLogger(SearchRepositoryImpl.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 	
 	@Override
 	public List<Long> searchCarreras(CarreraFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a searchCarreras()");
 		String condition = "WHERE ";
 		if (filtrosDTO.getNombre() != null) {
 			condition = condition + "car.nombre like '%" + filtrosDTO.getNombre() + "%'";

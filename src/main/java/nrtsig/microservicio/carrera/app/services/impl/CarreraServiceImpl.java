@@ -3,7 +3,10 @@ package nrtsig.microservicio.carrera.app.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import utils.NRTUtils;
 @Service
 public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraRepository> implements CarreraService {
 
+	private static final Logger logger = LoggerFactory.getLogger(CarreraServiceImpl.class);
 	@Autowired
 	private CarreraRepository carreraRepository;
 	@Autowired
@@ -26,6 +30,12 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 	
 	@Override
 	public Carrera save(Carrera entity) throws Exception {
+		logger.debug("Ingresa a save()");
+		// Validamos que la carrera no exista
+		Long idCarrera = carreraRepository.findIdCarreraByNombreAndNombreCorto(entity.getNombre(), entity.getNombreCorto());
+		if (idCarrera != null) {
+			throw new Exception("La carrera ya existe");
+		}
 		// Validamos que el nombre de la carrera no contenga numeros
 		if (NRTUtils.cadContainsDigit(entity.getNombre())) {
 			throw new Exception("El nombre de la carrera no puede contener numeros, solo letras");
@@ -50,11 +60,24 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 
 	@Override
 	public List<Carrera> search(CarreraFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a search()");
 		// Primero recupero los ids de las carreras de acuerdo a los filtros seleccionados
 		List<Long> idList = searchRepository.searchCarreras(filtrosDTO);
 		// Luego recuperamos del repository las carreras correspondientes
 		List<Carrera> carreras = new ArrayList<Carrera>();
 		carreras = (List<Carrera>) carreraRepository.findAllById(idList);
 		return carreras;
+	}
+
+	@Override
+	public void activarCarrera(Long id) throws Exception {
+		logger.debug("Ingresa el activarCarrera()");
+		Optional<Carrera> carreraOpt = carreraRepository.findById(id);
+		if (carreraOpt.isEmpty()) {
+			throw new Exception("La carrera no existe en la base de datos");
+		}
+		Carrera carreraDb = carreraOpt.get();
+		carreraDb.setCarreraActiva(true);
+		carreraRepository.save(carreraDb);
 	}
 }
