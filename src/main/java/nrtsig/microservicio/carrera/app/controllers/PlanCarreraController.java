@@ -40,4 +40,5 @@ public class PlanCarreraController extends CommonController<PlanCarrera, PlanCar
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }

@@ -80,4 +80,30 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 		carreraDb.setCarreraActiva(true);
 		carreraRepository.save(carreraDb);
 	}
+
+	@Override
+	public Carrera actualizarCarrera(Carrera carrera, Long id) throws Exception {
+		logger.debug("Ingresa el actualizarCarrera()");
+		Optional<Carrera> o = carreraRepository.findById(id);
+		if (o.isEmpty()) {
+			throw new Exception("No existe la carrera");
+		}
+		Carrera carreraDb = o.get();
+		carreraDb.setId(carrera.getId());
+		carreraDb.setNombre(carrera.getNombre());
+		carreraDb.setNombreCorto(carrera.getNombreCorto());
+		carreraDb.setDescripcion(carrera.getDescripcion());
+		carreraDb.setDuracion(carrera.getDuracion());
+		carreraDb.setDepartamento(carrera.getDepartamento());
+		carreraDb.setTipoCarrera(carrera.getTipoCarrera());
+		carreraDb.setPlanesCarrera(carrera.getPlanesCarrera());
+		carreraDb.setCarreraActiva(carrera.getCarreraActiva());
+		return carreraRepository.save(carreraDb);
+	}
+
+	@Override
+	public void desactivarCarrera(Long id) {
+		logger.debug("Ingresa a desactivarCarrera()");
+		carreraRepository.updateCarreraActiva(id);
+	}
 }

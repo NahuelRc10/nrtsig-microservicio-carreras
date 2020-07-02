@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,5 +47,19 @@ public class CarreraController extends CommonController<Carrera, CarreraService>
 			e.printStackTrace();
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Carrera carrera) throws Exception {
+		logger.debug("Ingresa a editar()");
+		Carrera carreraDb = carreraService.actualizarCarrera(carrera, id);
+		return new ResponseEntity<Carrera>(carreraDb, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/{id}/desactivar-carrera")
+	public ResponseEntity<?> desactivaCarrera(@PathVariable Long id) {
+		logger.debug("Ingresa a desactivaCarrera()");
+		carreraService.desactivarCarrera(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

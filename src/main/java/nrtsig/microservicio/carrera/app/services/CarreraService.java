@@ -11,4 +11,6 @@ public interface CarreraService extends CommonService<Carrera> {
 
 	public List<Carrera> search(CarreraFiltrosDTO filtrosDTO);
 	public void activarCarrera(Long id) throws Exception;
+	public Carrera actualizarCarrera(Carrera carrera, Long id) throws Exception;
+	public void desactivarCarrera(Long id);
 }
