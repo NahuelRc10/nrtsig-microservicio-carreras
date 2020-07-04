@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
+import nrtsig.microservicio.carrera.app.models.dto.PlanCarreraFiltrosDTO;
 
 @Component
 public class SearchRepositoryImpl implements SearchRepository {
@@ -45,6 +46,51 @@ public class SearchRepositoryImpl implements SearchRepository {
 						  "inner join tipo_carreras tipoCar on tipoCar.id = car.id_tipo_carrera " + 
 						  "inner join departamentos depart on depart.id = car.id_departamento " + 
 						  condition;
+		System.out.println("QUERY: " + sqlQuery);
+		Query query = entityManager.createNativeQuery(sqlQuery);
+		@SuppressWarnings({ "unused", "unchecked" })
+		List<Object[]> result = query.getResultList();
+		List<Long> idList = new ArrayList<Long>();
+				
+		for (Object[] r : result) {
+			try {
+				Long id;
+				id = r[0] != null ? Long.parseLong(r[0].toString()) : null;
+				idList.add(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return idList;
+	}
+
+	@Override
+	public List<Long> searchPlanCarrera(PlanCarreraFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a searchPlanCarrera()");
+		String condition = "WHERE ";
+		if (filtrosDTO.getAnioPlanDesde() != null) {
+			condition = condition + "plan.anio_plan >= " + filtrosDTO.getAnioPlanDesde();
+		}
+		if (filtrosDTO.getAnioPlanHasta() != null) {
+			condition = condition + " and plan.anio_plan <= " + filtrosDTO.getAnioPlanHasta();
+		}
+		if (filtrosDTO.getCarrera() != null) {
+			condition = condition + " and carrera.id = " + filtrosDTO.getCarrera().getId();
+		}
+		if (filtrosDTO.getTipoCarrera() != null) {
+			condition = condition + " and tipoCar.id = " + filtrosDTO.getTipoCarrera().getId();
+		}
+		if (filtrosDTO.getDpto() != null) {
+			condition = condition + " and dpto.id = " + filtrosDTO.getDpto().getId();
+		}
+		
+		String sqlQuery = "select plan.id, plan.anio_plan " + 
+						  "from plan_carreras plan " + 
+						  "inner join carreras carrera on carrera.id = plan.id_carrera " + 
+						  "inner join departamentos dpto on dpto.id = plan.id_departamento " + 
+						  "inner join tipo_carreras tipoCar on tipoCar.id = carrera.id_tipo_carrera " + 
+						  condition;
+	
 		System.out.println("QUERY: " + sqlQuery);
 		Query query = entityManager.createNativeQuery(sqlQuery);
 		@SuppressWarnings({ "unused", "unchecked" })

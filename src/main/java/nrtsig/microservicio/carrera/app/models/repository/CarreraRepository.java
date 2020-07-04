@@ -1,5 +1,7 @@
 package nrtsig.microservicio.carrera.app.models.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,4 +18,10 @@ public interface CarreraRepository extends PagingAndSortingRepository<Carrera, L
 	@Transactional
 	@Query(value = "update carreras set carrera_activa = false where id = ?1", nativeQuery = true)
 	public void updateCarreraActiva(Long idCarrera);
+	
+	@Query("select c from Carrera c order by c.nombre asc")
+	public List<Carrera> findCarrerasOrderByNombre();
+	
+	@Query("select c from Carrera c where c.departamento.id = ?1 order by c.nombre asc")
+	public List<Carrera> findCarreraByDepartamentoOrderByNombre(Long idDepartamento);
 }

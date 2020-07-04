@@ -106,4 +106,19 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 		logger.debug("Ingresa a desactivarCarrera()");
 		carreraRepository.updateCarreraActiva(id);
 	}
+
+	@Override
+	public List<Carrera> getCarrerasOrdenadasByNombre() {
+		logger.debug("Ingresa a getCarrerasOrdenadasByNombre()");
+		List<Carrera> carrerasOrdenadas = carreraRepository.findCarrerasOrderByNombre();
+		return carrerasOrdenadas;
+	}
+
+	@Override
+	public List<Carrera> getCarreraByDepartamento(Long idDepartamento) {
+		logger.debug("Ingresa a getCarreraByDepartamento()");
+		List<Carrera> carreras = new ArrayList<Carrera>();
+		carreras = carreraRepository.findCarreraByDepartamentoOrderByNombre(idDepartamento);
+		return carreras;
+	}
 }

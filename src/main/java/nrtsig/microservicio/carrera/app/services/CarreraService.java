@@ -13,4 +13,6 @@ public interface CarreraService extends CommonService<Carrera> {
 	public void activarCarrera(Long id) throws Exception;
 	public Carrera actualizarCarrera(Carrera carrera, Long id) throws Exception;
 	public void desactivarCarrera(Long id);
+	public List<Carrera> getCarrerasOrdenadasByNombre();
+	public List<Carrera> getCarreraByDepartamento(Long idDepartamento);
 }

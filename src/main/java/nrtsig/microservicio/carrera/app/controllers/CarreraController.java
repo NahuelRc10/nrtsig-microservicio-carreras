@@ -62,4 +62,18 @@ public class CarreraController extends CommonController<Carrera, CarreraService>
 		carreraService.desactivarCarrera(id);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	@GetMapping("/listar-carreras-ordenadas")
+	public ResponseEntity<?> obtenerCarrerasOrdenadasPorNombre() {
+		logger.debug("Ingresa a obtenerCarreraOrdenadasPorNombre()");
+		List<Carrera> carreras = carreraService.getCarrerasOrdenadasByNombre();
+		return new ResponseEntity<List<Carrera>>(carreras, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listar-carrera-por-departamento/{idDepartamento}")
+	public ResponseEntity<?> obtenerCarrerasByDepartamento(@PathVariable Long idDepartamento){
+		logger.debug("Ingresar a obtenerCarrerasByDepartamento()");
+		List<Carrera> carreras = carreraService.getCarreraByDepartamento(idDepartamento);
+		return new ResponseEntity<List<Carrera>>(carreras, HttpStatus.OK);
+	}
 }
