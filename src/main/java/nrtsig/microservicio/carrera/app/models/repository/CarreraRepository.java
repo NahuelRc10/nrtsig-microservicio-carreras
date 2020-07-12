@@ -24,4 +24,7 @@ public interface CarreraRepository extends PagingAndSortingRepository<Carrera, L
 	
 	@Query("select c from Carrera c where c.departamento.id = ?1 order by c.nombre asc")
 	public List<Carrera> findCarreraByDepartamentoOrderByNombre(Long idDepartamento);
+	
+	@Query(value = "select * from carreras c where c.id_tipo_carrera = ?1", nativeQuery = true)
+	public List<Carrera> findCarreraByTipoCarrera(Long idTipoCarrera);
 }

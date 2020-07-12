@@ -5,4 +5,5 @@ import nrt.microservicios.main.commons.carrera.entity.EstadoCarrera;
 
 public interface EstadoCarreraService extends CommonService<EstadoCarrera> {
 
+	public EstadoCarrera getEstadoSegunCodigo(String codigo);
 }

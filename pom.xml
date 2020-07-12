@@ -22,11 +22,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>nrt.microservicios.commons</groupId>
-			<artifactId>commons-microservicios</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>nrt.microservicios.main.commons</groupId>
 			<artifactId>nrtsig-microservicios-main</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

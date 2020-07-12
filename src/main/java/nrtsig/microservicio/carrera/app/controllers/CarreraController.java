@@ -76,4 +76,12 @@ public class CarreraController extends CommonController<Carrera, CarreraService>
 		List<Carrera> carreras = carreraService.getCarreraByDepartamento(idDepartamento);
 		return new ResponseEntity<List<Carrera>>(carreras, HttpStatus.OK);
 	}
+	
+	@GetMapping("/listar-carrera-por-tipo/{idTipoCarrera}")
+	public ResponseEntity<?> obtenerCarrerasByTipoCarrera(@PathVariable Long idTipoCarrera) {
+		logger.debug("Ingresa a obtenerCarrerasByTipoCarrera()");
+		List<Carrera> carreras = carreraService.getCarrerasByTipoCarrera(idTipoCarrera);
+		return new ResponseEntity<List<Carrera>>(carreras, HttpStatus.OK);
+	}
+	
 }
