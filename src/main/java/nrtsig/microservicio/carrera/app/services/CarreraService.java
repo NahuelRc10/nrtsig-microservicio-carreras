@@ -16,4 +16,5 @@ public interface CarreraService extends CommonService<Carrera> {
 	public List<Carrera> getCarrerasOrdenadasByNombre();
 	public List<Carrera> getCarreraByDepartamento(Long idDepartamento);
 	public List<Carrera> getCarrerasByTipoCarrera(Long idTipoCarrera);
+	public List<Carrera> getCarrerasByTipoCarreraAndByAlumno(Long idAlumno, Long idTipoCarrera);
 }

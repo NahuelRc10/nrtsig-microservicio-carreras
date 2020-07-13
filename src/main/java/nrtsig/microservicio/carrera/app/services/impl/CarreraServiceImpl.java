@@ -129,4 +129,23 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 		carreras = carreraRepository.findCarreraByTipoCarrera(idTipoCarrera);
 		return carreras;
 	}
+
+	@Override
+	public List<Carrera> getCarrerasByTipoCarreraAndByAlumno(Long idAlumno, Long idTipoCarrera) {
+		logger.debug("Ingresa a getCarrerasByTipoCarreraAndByAlumno()");
+		// Nos traemos de la base los id de las carreras a las que esta inscripto el alumno segun 
+		// el tipo de carrera seleccionado
+		List<Long> idListCarreras = new ArrayList<Long>();
+		idListCarreras = carreraRepository.findIdCarreraByTipoCarreraAndAlumno(idAlumno, idTipoCarrera);
+		// Nos traemos una lista con las carreras segun el tipo seleccionado
+		List<Carrera> carrerasByTipo = carreraRepository.findCarreraByTipoCarrera(idTipoCarrera);
+		// Filtramos las carreras que debemos devolver
+		List<Carrera> carreraList = new ArrayList<Carrera>();
+		for (Carrera c : carrerasByTipo) {
+			if (!idListCarreras.contains(c.getId())) {
+				carreraList.add(c);
+			}
+		}
+		return carreraList;
+	}
 }
