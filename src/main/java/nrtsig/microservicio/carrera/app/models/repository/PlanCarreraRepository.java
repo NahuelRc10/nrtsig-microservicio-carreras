@@ -18,3 +18,6 @@ public interface PlanCarreraRepository extends PagingAndSortingRepository<PlanCa
 	@Query(value = "select max(plan.anio_plan) from plan_carreras where plan.anio_plan < year(now()) and plan.id_carrera = ?", nativeQuery = true)
 	public Integer findLastAnioPlanByIdCarrera(Long idCarrera);
 }
+
+
+ 

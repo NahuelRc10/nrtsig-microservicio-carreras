@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
+import nrtsig.microservicio.carrera.app.models.dto.ComisionFiltrosDTO;
 import nrtsig.microservicio.carrera.app.models.dto.InscripcionCarreraFiltrosDTO;
 import nrtsig.microservicio.carrera.app.models.dto.PlanCarreraFiltrosDTO;
 
@@ -159,6 +160,41 @@ public class SearchRepositoryImpl implements SearchRepository {
 						  "inner join departamentos dpto on dpto.id = car.id_departamento " + 
 						  "inner join alumnos alumno on alumno.id = insCar.id_alumno " + 
 						  condition;
+
+		System.out.println("QUERY: " + sqlQuery);
+		Query query = entityManager.createNativeQuery(sqlQuery);
+		@SuppressWarnings({ "unused", "unchecked" })
+		List<Object[]> result = query.getResultList();
+		List<Long> idList = new ArrayList<Long>();
+				
+		for (Object[] r : result) {
+			try {
+				Long id;
+				id = r[0] != null ? Long.parseLong(r[0].toString()) : null;
+				idList.add(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return idList;
+	}
+
+	@Override
+	public List<Long> searchComision(ComisionFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a searchComision()");
+		String condition = "WHERE TRUE";
+		if (filtrosDTO.getNumeroComision() != null) {
+			condition = condition + " and com.numero_comision = " + filtrosDTO.getNumeroComision();
+		}
+		if (filtrosDTO.getCarrera() != null) {
+			condition = condition + " and carrera.id = " + filtrosDTO.getCarrera().getId();
+		}
+		
+		String sqlQuery = "select com.id, com.numero_comision " + 
+				          "from comisiones com " + 
+				          "inner join plan_carreras plan on plan.id = com.id_plan_carrera " + 
+				          "inner join carreras carrera on carrera.id = plan.id_carrera " + 
+				          condition;
 
 		System.out.println("QUERY: " + sqlQuery);
 		Query query = entityManager.createNativeQuery(sqlQuery);
