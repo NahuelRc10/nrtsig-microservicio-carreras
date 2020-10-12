@@ -11,4 +11,5 @@ public interface InscripcionCarreraService extends CommonService<InscripcionCarr
 	public List<InscripcionCarrera> searchInscripcionesCarrera(InscripcionCarreraFiltrosDTO filtrosDTO);
 	public InscripcionCarrera confirmarInscripcionCarrera(Long id) throws Exception;
 	public InscripcionCarrera reprobarInscripcionCarrera(Long id) throws Exception;
+	public List<InscripcionCarrera> getInscripcionesAlumno(Long idAlumno);
 }

@@ -11,4 +11,8 @@ public interface AsignaturaCorrelativaRepository extends JpaRepository<Asignatur
 
 	@Query("select a from AsignaturaCorrelativa a where a.idAsignaturaPrincipal = ?1")
 	public List<AsignaturaCorrelativa> findByIdAsignaturaPrincipal(Long idAsignaturaPrincipal);
+
+	@Query(value = "delete from correlativas where id_asignatura = ?1", nativeQuery = true)
+	public Long deleteCorrelativasByIdAsignatura(Long idAsignatura);
+
 }

@@ -6,6 +6,7 @@ public class ComisionFiltrosDTO {
 
 	private Integer numeroComision;
 	private Carrera carrera;
+	private Integer turnoCursado;
 	
 	public ComisionFiltrosDTO() {}
 
@@ -24,5 +25,12 @@ public class ComisionFiltrosDTO {
 	public void setCarrera(Carrera carrera) {
 		this.carrera = carrera;
 	}
-	
+
+	public Integer getTurnoCursado() {
+		return turnoCursado;
+	}
+
+	public void setTurnoCursado(Integer turnoCursado) {
+		this.turnoCursado = turnoCursado;
+	}
 }

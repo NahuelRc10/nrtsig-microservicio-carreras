@@ -5,4 +5,5 @@ import nrt.microservicios.main.commons.carrera.entity.EstadoAsignatura;
 
 public interface EstadoAsignaturaService extends CommonService<EstadoAsignatura> {
 
+    public EstadoAsignatura getEstadoAsignaturaByCodigo(String codigo);
 }

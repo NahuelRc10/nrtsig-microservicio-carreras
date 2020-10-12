@@ -8,13 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import nrt.microservicios.commons.controllers.CommonController;
 import nrt.microservicios.main.commons.carrera.entity.Carrera;
@@ -89,5 +83,17 @@ public class CarreraController extends CommonController<Carrera, CarreraService>
 		logger.debug("Ingresa a obtenerCarrerasByTipoCarreraAndAlumno()");
 		List<Carrera> carreras = carreraService.getCarrerasByTipoCarreraAndByAlumno(idAlumno, idTipoCarrera);
 		return new ResponseEntity<List<Carrera>>(carreras, HttpStatus.OK);
+	}
+
+	@GetMapping("/listar-carrera-por-duracion")
+	public ResponseEntity<?> obtenerCarrerasByDuracion(@RequestParam(name = "duracion") Integer duracion) {
+		logger.debug("Ingresa a obtenerCarrerasByDuracion()");
+		return new ResponseEntity<List<Carrera>>(carreraService.getCarrerasByDuracion(duracion), HttpStatus.OK);
+	}
+
+	@GetMapping("/listar-carreras-inscriptas-segun-alumno/{idAlumno}")
+	public ResponseEntity<?> obtenerCarrerasInscriptasSegunAlumno(@PathVariable Long idAlumno) {
+		logger.debug("Ingresa a obtenerCarrerasInscriptasSegunAlumno()");
+		return new ResponseEntity<List<Carrera>>(carreraService.getCarrerasAlumnoInscripto(idAlumno), HttpStatus.OK);
 	}
 }

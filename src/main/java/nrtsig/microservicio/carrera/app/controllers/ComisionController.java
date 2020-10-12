@@ -47,4 +47,16 @@ public class ComisionController extends CommonController<Comision, ComisionServi
 		}
 		return new ResponseEntity<Comision>(comisionDb, HttpStatus.CREATED);
 	}
+
+	@GetMapping("/listar-comisiones-carrera/{idCarrera}")
+	public ResponseEntity<?> listarComisionesByCarrera(@PathVariable Long idCarrera) {
+		logger.debug("Ingresa a listarComisionesByCarrera()");
+		return new ResponseEntity<List<Comision>>(comisionService.getComisionesByIdCarrera(idCarrera), HttpStatus.OK);
+	}
+
+	@GetMapping("/comisiones-posibles-asignatura/{idPlanCarrera}")
+	public ResponseEntity<?> listarComisionesSegunPlanAndNivelAsignatura(@PathVariable Long idPlanCarrera, @RequestParam(name = "nivel") Integer nivel) {
+		logger.debug("Ingresa a listarComisionesSegunPlanAndNivelAsignatura()");
+		return ResponseEntity.ok(comisionService.getComisionesByPlanCarreraAndNivelAsignatura(idPlanCarrera, nivel));
+	}
 }

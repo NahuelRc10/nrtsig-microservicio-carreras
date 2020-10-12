@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import nrtsig.microservicio.carrera.app.models.dto.InscripcionAsignaturaGroupDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,13 @@ public class InscripcionCarreraServiceImpl extends CommonServiceImpl<Inscripcion
 		// Cambiamos el estado de la carrera a LIBRE
 		inscripcionCarrera.setEstadoCarrera(estadoCarreraService.getEstadoSegunCodigo(EstadoCarrera.LIBRE));
 		return inscripcionCarreraRepository.save(inscripcionCarrera);
+	}
+
+	@Override
+	public List<InscripcionCarrera> getInscripcionesAlumno(Long idAlumno) {
+		logger.debug("Ingresa getInscripcionesAlumno()");
+		List<InscripcionCarrera> dtoList = new ArrayList<>();
+		return inscripcionCarreraRepository.findInscripcionesByIdAlumno(idAlumno);
 	}
 
 }

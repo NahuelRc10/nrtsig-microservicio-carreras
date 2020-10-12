@@ -6,4 +6,5 @@ import nrt.microservicios.main.commons.carrera.entity.EstadoAsignatura;
 
 public interface EstadoAsignaturaRepository extends JpaRepository<EstadoAsignatura, Long> {
 
+    public EstadoAsignatura findByCodigo(String codigo);
 }

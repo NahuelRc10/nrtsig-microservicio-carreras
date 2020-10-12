@@ -36,4 +36,7 @@ public interface CarreraRepository extends PagingAndSortingRepository<Carrera, L
 				   "inner join alumnos alumno on inscrip.id_alumno = alumno.id " + 
 				   "where alumno.id = ?1 and tipo.id = ?2", nativeQuery = true)
 	public List<Long> findIdCarreraByTipoCarreraAndAlumno(Long idAlumno, Long idTipoCarrera);
+
+	@Query(value = "select * from carreras c where c.duracion > ?1 or c.duracion = ?1", nativeQuery = true)
+	public List<Carrera> findCarrerasByDuracion(Integer duracion);
 }

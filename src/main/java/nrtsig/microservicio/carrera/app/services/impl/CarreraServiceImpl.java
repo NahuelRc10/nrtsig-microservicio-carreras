@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import nrt.microservicios.main.commons.carrera.entity.InscripcionCarrera;
+import nrtsig.microservicio.carrera.app.services.InscripcionCarreraService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,9 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 	@Autowired
 	private CarreraRepository carreraRepository;
 	@Autowired
-	private SearchRepository searchRepository; 
+	private SearchRepository searchRepository;
+	@Autowired
+	private InscripcionCarreraService inscripcionCarreraService;
 	
 	@Override
 	public Carrera save(Carrera entity) throws Exception {
@@ -147,5 +151,25 @@ public class CarreraServiceImpl extends CommonServiceImpl<Carrera, CarreraReposi
 			}
 		}
 		return carreraList;
+	}
+
+	@Override
+	public List<Carrera> getCarrerasByDuracion(Integer duracion) {
+		logger.debug("Ingresa a getCarrerasByDuracion()");
+		List<Carrera> carreras = new ArrayList<>();
+		return carreraRepository.findCarrerasByDuracion(duracion);
+	}
+
+	@Override
+	public List<Carrera> getCarrerasAlumnoInscripto(Long idAlumno) {
+		logger.debug("Ingresa a getCarrerasAlumnoInscripto()");
+		List<Carrera> carreras = new ArrayList<>();
+		List<InscripcionCarrera> inscripciones = inscripcionCarreraService.getInscripcionesAlumno(idAlumno);
+		if (!NRTUtils.isNullOrEmpty(inscripciones)) {
+			for (InscripcionCarrera ic : inscripciones) {
+				carreras.add(ic.getPlanCarrera().getCarrera());
+			}
+		}
+		return carreras;
 	}
 }

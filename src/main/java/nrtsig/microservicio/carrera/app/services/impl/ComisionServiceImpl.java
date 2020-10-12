@@ -78,4 +78,21 @@ public class ComisionServiceImpl extends CommonServiceImpl<Comision, ComisionRep
 		aulaService.liberarAulaByIdComision(null, id);
 		comisionRepository.deleteById(id);
 	}
+
+	@Override
+	public List<Comision> getComisionesByIdCarrera(Long idCarrera) {
+		logger.debug("Ingresa a getComisionesByIdCarrera()");
+		List<Comision> list = new ArrayList<>();
+		return comisionRepository.findComisionesByIdCarrera(idCarrera);
+	}
+
+	@Override
+	public List<Comision> getComisionesByPlanCarreraAndNivelAsignatura(Long idPlanCarrera, Integer nivelAsignatura) {
+		logger.debug("Ingresa a getComisionesByPlanCarreraAndNivelAsignatura()");
+		Integer nroComDesde = Integer.parseInt(nivelAsignatura.toString() + "00");
+		nivelAsignatura++;
+		Integer nroComHasta = Integer.parseInt(nivelAsignatura.toString() + "00");
+		List<Comision> comisiones = new ArrayList<>();
+		return comisionRepository.findComisionesByIdPlanCarreraAndNivelAsignatura(idPlanCarrera, nroComDesde, nroComHasta);
+	}
 }

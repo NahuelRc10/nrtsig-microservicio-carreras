@@ -11,4 +11,6 @@ public interface ComisionService extends CommonService<Comision> {
 	public List<Comision> search(ComisionFiltrosDTO filtrosDTO);
 	public boolean existComisionParaCarrera(Long idPlanCarrera, Integer numeroComision);
 	public Comision updateComision(Long id, Comision comision) throws Exception;
+	public List<Comision> getComisionesByIdCarrera(Long idCarrera);
+	public List<Comision> getComisionesByPlanCarreraAndNivelAsignatura(Long idPlanCarrera, Integer nivelAsignatura);
 }

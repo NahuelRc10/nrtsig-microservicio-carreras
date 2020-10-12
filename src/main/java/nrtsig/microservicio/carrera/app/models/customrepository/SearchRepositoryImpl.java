@@ -8,14 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import nrtsig.microservicio.carrera.app.models.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import nrtsig.microservicio.carrera.app.models.dto.CarreraFiltrosDTO;
-import nrtsig.microservicio.carrera.app.models.dto.ComisionFiltrosDTO;
-import nrtsig.microservicio.carrera.app.models.dto.InscripcionCarreraFiltrosDTO;
-import nrtsig.microservicio.carrera.app.models.dto.PlanCarreraFiltrosDTO;
 
 @Component
 public class SearchRepositoryImpl implements SearchRepository {
@@ -189,6 +185,10 @@ public class SearchRepositoryImpl implements SearchRepository {
 		if (filtrosDTO.getCarrera() != null) {
 			condition = condition + " and carrera.id = " + filtrosDTO.getCarrera().getId();
 		}
+
+		if (filtrosDTO.getTurnoCursado() != null) {
+			condition = condition + " and com.turno_cursado = " + filtrosDTO.getTurnoCursado();
+		}
 		
 		String sqlQuery = "select com.id, com.numero_comision " + 
 				          "from comisiones com " + 
@@ -202,6 +202,92 @@ public class SearchRepositoryImpl implements SearchRepository {
 		List<Object[]> result = query.getResultList();
 		List<Long> idList = new ArrayList<Long>();
 				
+		for (Object[] r : result) {
+			try {
+				Long id;
+				id = r[0] != null ? Long.parseLong(r[0].toString()) : null;
+				idList.add(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return idList;
+	}
+
+	@Override
+	public List<Long> searchAsignaturas(AsignaturaFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a searchAsignaturas");
+		String condition = "WHERE TRUE";
+		if (filtrosDTO.getNombre() != null) {
+			condition = condition + " and asignatura.nombre like '%" + filtrosDTO.getNombre() + "%' ";
+		}
+		if (filtrosDTO.getNivel() != null) {
+			condition = condition + " and asignatura.nivel = " + filtrosDTO.getNivel();
+		}
+		if (filtrosDTO.getCarrera() != null) {
+			condition = condition + " and (plan.fecha_cierre is null and carrera.id = " + filtrosDTO.getCarrera().getId() + ") ";
+		}
+
+		String sqlQuery = "select asignatura.id, asignatura.nivel " +
+						  "from asignaturas asignatura " +
+						  "inner join plan_carreras plan on plan.id = asignatura.id_plan_carrera " +
+						  "inner join carreras carrera on carrera.id = plan.id_carrera " +
+						  condition;
+
+		System.out.println("QUERY: " + sqlQuery);
+		Query query = entityManager.createNativeQuery(sqlQuery);
+		List<Object[]> result = query.getResultList();
+		List<Long> idList = new ArrayList<>();
+
+		for (Object[] r : result) {
+			try {
+				Long id;
+				id = r[0] != null ? Long.parseLong(r[0].toString()) : null;
+				idList.add(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return idList;
+	}
+
+	@Override
+	public List<Long> searchInscripcionAsignatura(InscripcionAsignaturaFiltrosDTO filtrosDTO) {
+		logger.debug("Ingresa a searchInscripcionAsignatura()");
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String condition = "WHERE TRUE";
+		String fechaInscripcionDesde = filtrosDTO.getFechaInscripcionDesde() != null ? formato.format(filtrosDTO.getFechaInscripcionDesde()) : null;
+		String fechaInscripcionHasta = filtrosDTO.getFechaInscripcionHasta() != null ? formato.format(filtrosDTO.getFechaInscripcionHasta()) : null;
+
+		condition = condition + " and inscrip.fecha_inscripcion between '" + fechaInscripcionDesde + "' and '" + fechaInscripcionHasta + "' ";
+
+		if (filtrosDTO.getEstadoAsignatura() != null) {
+			condition = condition + " and estado.id = (select id from estados_asignaturas where descripcion = '" + filtrosDTO.getEstadoAsignatura() + "') ";
+		}
+		if (filtrosDTO.getCarrera() != null) {
+			condition = condition + " and carrera.id = " + filtrosDTO.getCarrera().getId();
+		}
+		if (filtrosDTO.getNombreAlumno() != null) {
+			condition = condition + " and (alumno.nombre like '%" + filtrosDTO.getNombreAlumno() + "%' or alumno.apellido like '%" + filtrosDTO.getNombreAlumno() + "%') ";
+		}
+		if (filtrosDTO.getNombreAsignatura() != null) {
+			condition = condition + " and asign.nombre like '%" + filtrosDTO.getNombreAsignatura() + "%' ";
+		}
+		String sqlQuery = "select inscrip.id, inscrip.fecha_inscripcion " +
+						  "from inscripcion_asignatura inscrip " +
+						  "inner join alumnos alumno on alumno.id = inscrip.id_alumno " +
+						  "inner join asignaturas asign on asign.id = inscrip.id_asignatura " +
+						  "inner join comisiones com on com.id = inscrip.id_comision " +
+						  "inner join plan_carreras plan on plan.id = inscrip.id_plan " +
+						  "inner join carreras carrera on carrera.id = plan.id_carrera " +
+						  "inner join estados_asignaturas estado on estado.id = inscrip.id_estado " +
+				          condition;
+
+		System.out.println("QUERY: " + sqlQuery);
+		Query query = entityManager.createNativeQuery(sqlQuery);
+		List<Object[]> result = query.getResultList();
+		List<Long> idList = new ArrayList<>();
+
 		for (Object[] r : result) {
 			try {
 				Long id;
